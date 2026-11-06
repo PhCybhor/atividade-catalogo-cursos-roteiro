@@ -1,0 +1,123 @@
+{
+  "info": {
+    "name": "Catálogo de Cursos",
+    "description": "Atividade prática — Instrutor 1:N Curso (Spring Boot).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "instrutorId",
+      "value": "1"
+    },
+    {
+      "key": "cursoId",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "Instrutores",
+      "item": [
+        {
+          "name": "Cadastrar instrutor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const data = pm.response.json();",
+                  "  if (data.id) {",
+                  "    pm.collectionVariables.set('instrutorId', String(data.id));",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Marina Costa\",\n  \"email\": \"marina.costa@example.com\"\n}"
+            },
+            "url": "{{baseUrl}}/api/instrutores",
+            "description": "Cadastra instrutor. Sucesso: 201 Created + Location."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar cursos do instrutor",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/instrutores/{{instrutorId}}/cursos",
+            "description": "Lista cursos do instrutor ordenados por título. Sucesso: 200 OK."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Cursos",
+      "item": [
+        {
+          "name": "Cadastrar curso",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const data = pm.response.json();",
+                  "  if (data.id) {",
+                  "    pm.collectionVariables.set('cursoId', String(data.id));",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"APIs REST com Spring Boot\",\n  \"cargaHoraria\": 40,\n  \"nivel\": \"INTERMEDIARIO\",\n  \"instrutorId\": {{instrutorId}}\n}"
+            },
+            "url": "{{baseUrl}}/api/cursos",
+            "description": "Cadastra curso vinculado a um instrutor existente. Sucesso: 201 Created + Location."
+          },
+          "response": []
+        },
+        {
+          "name": "Consultar curso por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/cursos/{{cursoId}}",
+            "description": "Consulta um curso pelo ID. Sucesso: 200 OK."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
